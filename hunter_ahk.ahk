@@ -135,11 +135,8 @@ WeavingEngine() {
             }
         }
 
-        ; P3: Aimed Shot (has cast time — stop movement first)
+        ; P3: Aimed Shot (instant in WotLK)
         if (InShooting && !IsGCD && AimedReady) {
-            if (MovementState != "none") {
-                SetMovement("none")
-            }
             SendEvent("3")
             return 
         }
