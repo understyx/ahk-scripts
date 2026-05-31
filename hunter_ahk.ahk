@@ -118,17 +118,13 @@ WeavingEngine() {
         }
 
         ; 6. PRIORITY EXECUTION TREE
-        if (InShooting && !IsGCD) {
-            if (ExplosiveReady) { 
-                SendEvent("4")
-                return 
-            }
-            if (AimedReady) { 
-                SendEvent("3")
-                return 
-            }
+        ; P1: Explosive Shot
+        if (InShooting && !IsGCD && ExplosiveReady) { 
+            SendEvent("4")
+            return 
         }
 
+        ; P2: Explosive Trap (requires melee range)
         if (TrapReady) {
             if (!InMelee) { 
                 SetMovement("forward")
@@ -139,7 +135,17 @@ WeavingEngine() {
             }
         }
 
-        if (InShooting && SerpentReady && !IsGCD) { 
+        ; P3: Aimed Shot (has cast time — stop movement first)
+        if (InShooting && !IsGCD && AimedReady) {
+            if (MovementState != "none") {
+                SetMovement("none")
+            }
+            SendEvent("3")
+            return 
+        }
+
+        ; P4: Serpent Sting
+        if (InShooting && !IsGCD && SerpentReady) { 
             SendEvent("1")
             return 
         }
